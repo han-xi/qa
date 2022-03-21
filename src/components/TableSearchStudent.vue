@@ -204,7 +204,7 @@ export default defineComponent({
       },
     ];
     if (auth.user.usertype == 1) {
-      columns = columns.filter((item) => item.title !== "删除学生");
+      columns = columns.filter((item) => item.title !== "删除学生"&&item.title!=="查看错题");
     }
    const handleTableChange = (pag, filters, sorter) => {
 
