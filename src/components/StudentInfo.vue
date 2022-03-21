@@ -12,6 +12,9 @@
           >
             <home-outlined /> {{ route.breadcrumbName }}
           </router-link>
+               <router-link v-else-if=" route.breadcrumbName==='class' " :to="`${basePath}/${paths[1]}/${paths[2]}/${params_cid}/${params_cname}`">
+            {{ route.breadcrumbName }}
+          </router-link>
           <router-link v-else :to="`${basePath}/${paths[1]}`">
             {{ route.breadcrumbName }}
           </router-link>
@@ -39,7 +42,7 @@
 
           <a-descriptions-item label="状态" :span="3">
             <a-badge status="processing" v-if="status" text="在线" />
-            <a-badge status="Default" v-else text="离线" />
+            <a-badge status="default" v-else text="离线" />
           </a-descriptions-item>
         </a-descriptions>
       </a-spin>
@@ -69,7 +72,7 @@
 
           <a-descriptions-item label="状态" :span="3">
             <a-badge status="processing" v-if="status" text="在线" />
-            <a-badge status="Default" v-else text="离线" />
+            <a-badge status="default" v-else text="离线" />
           </a-descriptions-item>
         </a-descriptions>
       </a-spin>
@@ -101,7 +104,6 @@ export default defineComponent({
   },
   setup(props, context) {
     const route = useRoute();
-
     const emitMes = () => {
       context.emit("listen", true);
     };
@@ -113,6 +115,10 @@ export default defineComponent({
       {
         path: "classlist",
         breadcrumbName: "classlist",
+      },
+         {
+        path: "class",
+        breadcrumbName: "class",
       },
       {
         path: "studentinfo",
@@ -130,7 +136,11 @@ export default defineComponent({
     }
 
     const id = ref("");
+    const params_cid = ref("")
+    const params_cname=ref("")
     id.value = route.params.id;
+    params_cid.value = route.params.cid
+    params_cname.value =route.params.cname
     onBeforeMount(() => {
       if (props.ismodel === 0) {
         getclassinfo();
@@ -211,9 +221,11 @@ export default defineComponent({
       studentname,
       registertime,
       loading,
-
+    route,
       props,
       emitMes,
+      params_cid,
+      params_cname
     };
   },
 });

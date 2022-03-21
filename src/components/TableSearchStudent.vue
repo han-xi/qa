@@ -85,7 +85,7 @@
       </template>
     </template>
     <template #operation="{ record }">
-      <a-button type="primary" @click="enterClass(record.key)"
+      <a-button type="primary" @click="enterStudent(record.key)"
         >查看错题</a-button
       >
     </template>
@@ -237,8 +237,8 @@ export default defineComponent({
     const classname = ref("");
     class_id.value = route.params.cid;
     classname.value = route.params.cname;
-    const enterClass = (val) => {
-      router.push("/classlist/student/" + val);
+    const enterStudent = (val) => {
+      router.push("/classlist/class/"+class_id.value+"/"+classname.value+"/"+"studentwrongquestion/" + val);
     };
     const deletestudent = (user_id, record) => {
       let postdata = {
@@ -263,7 +263,7 @@ export default defineComponent({
       handleReset,
       searchInput,
       ...toRefs(state),
-      enterClass,
+      enterStudent,
       class_id,
       loading,
       getstudentlist,

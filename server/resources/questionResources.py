@@ -1,12 +1,14 @@
 
 from flask_restful import Resource, reqparse
 from models.user import User
+from models.classes import ClassTeacher,ClassStudent
 from models.question import Question, WrongQuestion, CollectQuestion
 from flask_jwt_extended import (create_access_token, create_refresh_token,
                                 jwt_required, get_jwt_identity)
 from datetime import datetime
 from flask import jsonify
 import bson
+
 parser = reqparse.RequestParser()
 parser.add_argument(
     'problem_id', help='This field cannot be blank', required=False)
@@ -114,6 +116,18 @@ class GetWrongQuestionResource(Resource):
         isremain = False
         data = parser.parse_args()
         userIdentity = get_jwt_identity()
+        if data['user_id']:
+            current_user = User.objects(username=userIdentity['user']).first()
+            if current_user.usertype>2:
+                pass
+            else:
+                current_teacher = ClassTeacher.objects(teacher_id =userIdentity['user'],class_id = data['class_id']).first()
+                current_student = ClassStudent.objects(student_id = data['user_id'],class_id = data['class_id']).first()
+                if current_teacher and current_student:
+                    pass
+                else:
+                    return {'message':'未授权'},403
+            userIdentity['user']=data['user_id'] 
         current_wrong = WrongQuestion.objects(user_id=userIdentity['user'],problem_id = data['problem_id']).first()
         if current_wrong:
             currrent_question = Question.objects(id = bson.ObjectId(data['problem_id'])).first()
@@ -138,6 +152,21 @@ class GetWrongQuestionListResource(Resource):
             size = 5
         else:
             size = int(data['size'])
+            
+        if data['user_id']:
+            current_user = User.objects(username=userIdentity['user']).first()
+            
+            if current_user.usertype>2:
+                pass
+            else:
+                current_teacher = ClassTeacher.objects(teacher_id =userIdentity['user'],class_id = data['class_id']).first()
+                current_student = ClassStudent.objects(student_id = data['user_id'],class_id = data['class_id']).first()
+
+                if current_teacher and current_student:
+                    pass
+                else:
+                    return {'message':'未授权'},403
+            userIdentity['user']=data['user_id']        
         current_problem_id = WrongQuestion.objects(
             user_id=userIdentity['user']).paginate(page=int(data['page']), per_page=size).items
 
@@ -275,29 +304,48 @@ class DeleteWrongQuestionResource(Resource):
 class GetCollectQuestionResource(Resource):
     @jwt_required()
     def post(self):
+        data = parser.parse_args()
+        userIdentity = get_jwt_identity()
+        current_wrong = CollectQuestion.objects(user_id=userIdentity['user'],problem_id = data['problem_id']).first()
+        if current_wrong:
+            currrent_question = Question.objects(id = bson.ObjectId(data['problem_id'])).first()
+            return {
+                "Title":'{}'.format(currrent_question.problem),
+                "Options":'{}'.format(currrent_question.options),
+                "Answer":'{}'.format(currrent_question.answer),
+            }
+        else:
+            return {'message':'未授权'},403
+class GetCollectQuestionListResource(Resource):
+    @jwt_required()
+    def post(self):
         result = []
         isremain = False
         data = parser.parse_args()
         userIdentity = get_jwt_identity()
+        if not data['size']:
+            size = 5
+        else:
+            size = int(data['size'])
         current_problem_id = CollectQuestion.objects(
-            user_id=userIdentity['user']).paginate(page=data['page'], per_page=10).items
+            user_id=userIdentity['user']).paginate(page=int(data['page']), per_page=size).items
+
         if current_problem_id:
             problems_id = []
             for item in current_problem_id:
                 problems_id.append(item.problem_id)
             problems_id.sort()
             problems_id = [bson.ObjectId(item) for item in problems_id]
-            problem = Question.objects(id__in=problems_id).all()
-            for item1, item2 in zip(current_problem_id, problem):
+            problem = Question.objects(id__in=problems_id)
+            for ind,(item1, item2) in enumerate(zip(current_problem_id, problem)):
                 result.append({
                     'problem_id': '{}'.format(item1.problem_id),
-                    'problem': '{}'.format(item2.problem),
-                    'wrong_answer': '{}'.format(item1.wrong_answer)
+                    'title': '{}'.format(item2.problem),
+                    'updatetime':'{}'.format(item1.updatetime.strftime("%Y-%m-%d %H:%M:%S")),
+                    #'num':'{}'.format(item1.num)
                 })
-            isremain = len(current_problem_id) == 10
+            isremain = len(current_problem_id) == 5
         return {'result': result, 'isremain': isremain}, 200
-
-
 class AddCollectQuestionResource(Resource):
     @jwt_required()
     def post(self):

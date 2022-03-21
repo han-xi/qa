@@ -89,7 +89,8 @@ api.add_resource(questionResources.GetWrongQuestionListResourceForHome,'/wrongli
 api.add_resource(questionResources.GetWrongQuestionListResourceByUserid,'/wronglistbyuserid')
 api.add_resource(questionResources.AddWrongQuestionResource,'/addwrong')
 api.add_resource(questionResources.DeleteWrongQuestionResource,'/deletewrong')
-api.add_resource(questionResources.GetCollectQuestionResource,'/collectlist')
+api.add_resource(questionResources.GetCollectQuestionResource,'/collectinfo')
+api.add_resource(questionResources.GetCollectQuestionListResource,'/collectlist')
 api.add_resource(questionResources.AddCollectQuestionResource,'/addcollect')
 api.add_resource(questionResources.DeleteCollectQuestionResource,'/deletecollect')
 

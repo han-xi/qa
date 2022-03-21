@@ -61,6 +61,10 @@
           <video-camera-outlined />
           <span>错题库</span>
         </a-menu-item>
+        <a-menu-item key="7" v-if="authenticated">
+          <video-camera-outlined />
+          <span>收藏库</span>
+        </a-menu-item>
         <a-menu-item key="4" v-if="authenticated">
           <video-camera-outlined />
           <span>班级列表</span>
@@ -237,6 +241,8 @@ export default defineComponent({
           state.selectedKeys = ["5"];
         }else if (route.path === "/addinfo") {
           state.selectedKeys = ["6"];
+        }else if (route.path === "/collectquestion") {
+          state.selectedKeys = ["7"];
         }
       }
     );
@@ -269,6 +275,9 @@ export default defineComponent({
       }
       else if (e.key === "6") {
         router.push("/addinfo");
+      }
+          else if (e.key === "7") {
+        router.push("/collectquestion");
       }
       else if (e.key === "10") {
         auth.user.authenticated = false;

@@ -27,6 +27,9 @@ export default{
     deletewrong(data){
         return ajax.post('/deletewrong',data)
     },
+    getcollectinfo(data){
+        return ajax.post('/collectinfo',data)
+    },
     getcollectlist(data){
         return ajax.post('/collectlist',data)
     },
