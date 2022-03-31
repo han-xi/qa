@@ -103,7 +103,14 @@
 </template>
 <script>
 import { SearchOutlined } from "@ant-design/icons-vue";
-import { defineComponent, reactive, ref, toRefs, onBeforeMount,computed } from "vue";
+import {
+  defineComponent,
+  reactive,
+  ref,
+  toRefs,
+  onBeforeMount,
+  computed,
+} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import classes from "../apis/classes";
 import { message } from "ant-design-vue";
@@ -120,8 +127,8 @@ export default defineComponent({
     // let current = ref(1);
 
     let total = ref(0);
-    let current = ref(1)
-    let sorterOrder =ref('')
+    let current = ref(1);
+    let sorterOrder = ref("");
     const data = ref([]);
     onBeforeMount(() => {
       getstudentlist();
@@ -129,15 +136,15 @@ export default defineComponent({
     const getstudentlist = () => {
       const postdata = {
         class_id: route.params.cid,
-        current:current.value,
-        sorter:sorterOrder.value,
-        search: state.searchText        
+        current: current.value,
+        sorter: sorterOrder.value,
+        search: state.searchText,
       };
       classes
         .getstudentlist(postdata)
         .then((res) => {
           data.value = res.data["result"];
-         total.value =res.data["total"]
+          total.value = res.data["total"];
           // total.value = data.value.length;
           loading.value = false;
         })
@@ -204,33 +211,32 @@ export default defineComponent({
       },
     ];
     if (auth.user.usertype == 1) {
-      columns = columns.filter((item) => item.title !== "删除学生"&&item.title!=="查看错题");
+      columns = columns.filter(
+        (item) => item.title !== "删除学生" && item.title !== "查看错题"
+      );
     }
-   const handleTableChange = (pag, filters, sorter) => {
-
-        current.value= pag.current,
-         
-        sorterOrder.value= sorter.order
-        getstudentlist()
-        console.log(sorterOrder.value)
-    }
+    const handleTableChange = (pag, filters, sorter) => {
+      (current.value = pag.current), (sorterOrder.value = sorter.order);
+      getstudentlist();
+      console.log(sorterOrder.value);
+    };
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
       confirm();
-       current.value=1
+      current.value = 1;
       state.searchText = selectedKeys[0];
       state.searchedColumn = dataIndex;
-      getstudentlist()
+      getstudentlist();
       // selectedKeys[0] = state.searchText
     };
     const pagination = computed(() => ({
       total: total.value,
       current: current.value,
-      pageSize: 2,
+      pageSize: 5,
     }));
     const handleReset = (clearFilters) => {
       clearFilters();
       state.searchText = "";
-      getstudentlist()
+      getstudentlist();
     };
 
     const class_id = ref("");
@@ -238,7 +244,15 @@ export default defineComponent({
     class_id.value = route.params.cid;
     classname.value = route.params.cname;
     const enterStudent = (val) => {
-      router.push("/classlist/class/"+class_id.value+"/"+classname.value+"/"+"studentwrongquestion/" + val);
+      router.push(
+        "/classlist/class/" +
+          class_id.value +
+          "/" +
+          classname.value +
+          "/" +
+          "studentwrongquestion/" +
+          val
+      );
     };
     const deletestudent = (user_id, record) => {
       let postdata = {
@@ -269,8 +283,8 @@ export default defineComponent({
       getstudentlist,
       classname,
       deletestudent,
-     handleTableChange,
-      pagination
+      handleTableChange,
+      pagination,
     };
   },
 });

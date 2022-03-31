@@ -123,14 +123,14 @@ class GetClassListResource(Resource):
             total = len(SearchClass)
         if sorter=='ascend':
             current_class = SearchClass.order_by('registertime').paginate(
-                page=int(data['current']), per_page=2).items               
+                page=int(data['current']), per_page=5).items               
         elif sorter=='descend':
 
             current_class = SearchClass.order_by('-registertime').paginate(
-                page=int(data['current']), per_page=2).items                 
+                page=int(data['current']), per_page=5).items                 
         else:            
             current_class = SearchClass.paginate(
-            page=int(data['current']), per_page=2).items     
+            page=int(data['current']), per_page=5).items     
         if user and user.usertype==2: 
             current_teacher = ClassTeacher.objects(teacher_id = userIdentity['user']).all()
             classes_teacher = []
@@ -278,7 +278,7 @@ class GetStudentListResource(Resource):
             SearchStudent = User.objects(username__in = classids,username = regex)
             total = len(SearchStudent)
         current_class = SearchStudent.paginate(
-                page=int(data['current']), per_page=2).items             
+                page=int(data['current']), per_page=5).items             
         userid=[]
         for item in current_class:
             userid.append(item.username)
@@ -631,13 +631,13 @@ class GetApplyStudentListResource(Resource):
                 current_apply = ClassStudent.objects(activate=False).all()
             if data['sorter']=='ascend':
                 current_apply =current_apply.order_by('updatetime').paginate(
-                page=int(data['current']), per_page=2).items  
+                page=int(data['current']), per_page=5).items  
             elif data['sorter'] =='descend':
                 current_apply=current_apply.order_by('-updatetime').paginate(
-                page=int(data['current']), per_page=2).items  
+                page=int(data['current']), per_page=5).items  
             else:
                 current_apply=current_apply.paginate(
-                page=int(data['current']), per_page=2).items                  
+                page=int(data['current']), per_page=5).items                  
             user_ids=[]
             class_ids = []
             for item in current_apply:
@@ -701,13 +701,13 @@ class GetApplyStudentListResource(Resource):
                 current_apply = ClassStudent.objects(activate=False,class_id__in =class_ids)
             if data['sorter']=='ascend':
                 current_apply =current_apply.order_by('updatetime').paginate(
-                page=int(data['current']), per_page=2).items  
+                page=int(data['current']), per_page=5).items  
             elif data['sorter'] =='descend':
                 current_apply=current_apply.order_by('-updatetime').paginate(
-                page=int(data['current']), per_page=2).items  
+                page=int(data['current']), per_page=5).items  
             else:
                 current_apply=current_apply.paginate(
-                page=int(data['current']), per_page=2).items                  
+                page=int(data['current']), per_page=5).items                  
             # current_apply = ClassStudent.objects(class_id__in=class_ids,activate=False)
             user_ids=[]
             new_class_ids = []
@@ -787,13 +787,13 @@ class GetApplyTeacherListResource(Resource):
                 current_apply = ClassTeacher.objects(activate=False).all()
             if data['sorter']=='ascend':
                 current_apply =current_apply.order_by('updatetime').paginate(
-                page=int(data['current']), per_page=2).items  
+                page=int(data['current']), per_page=5).items  
             elif data['sorter'] =='descend':
                 current_apply=current_apply.order_by('-updatetime').paginate(
-                page=int(data['current']), per_page=2).items        
+                page=int(data['current']), per_page=5).items        
             else:
                 current_apply=current_apply.order_by('-updatetime').paginate(
-                page=int(data['current']), per_page=2).items                 
+                page=int(data['current']), per_page=5).items                 
             user_ids=[]
             class_ids = []
             for item in current_apply:

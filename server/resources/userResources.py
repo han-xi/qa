@@ -262,13 +262,13 @@ class getUpgradePermissionListResource(Resource):
                 current_apply = User.objects(isupgrade=True).all()
             if data['sorter']=='ascend':
                 current_apply =current_apply.order_by('upgradetime').paginate(
-                page=int(data['current']), per_page=2).items  
+                page=int(data['current']), per_page=5).items  
             elif data['sorter'] =='descend':
                 current_apply=current_apply.order_by('-upgradetime').paginate(
-                page=int(data['current']), per_page=2).items  
+                page=int(data['current']), per_page=5).items  
             else:
                 current_apply=current_apply.paginate(
-                page=int(data['current']), per_page=2).items                
+                page=int(data['current']), per_page=5).items                
             total = len(current_apply)
             for item in current_apply:
                 result.append({

@@ -87,10 +87,12 @@ class AddQuestionResource(Resource):
         user = User.objects(username=userIdentity['user']).first()
         if data['tags']=='':
             data['tags'] =[]
-        data['tags'] = [item for item in data['tags'].split(',')]
+        else:
+            data['tags'] = [item for item in data['tags'].split(',')]
         if data['class_id'] =='':
             data['class_id'] =[]
-        data['class_id'] = [item for item in data['class_id'].split(',')]
+        else:
+            data['class_id'] = [item for item in data['class_id'].split(',')]
         if data['options'] =='':
             return {'message':'输入选项'},400
         data['options'] = [item for item in data['options'].split(',')]

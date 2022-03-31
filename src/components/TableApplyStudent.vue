@@ -260,7 +260,7 @@ export default defineComponent({
     const pagination = computed(() => ({
       total: total.value,
       current: current.value,
-      pageSize: 2,
+      pageSize: 5,
     }));
 
     const handleTableChange = (pag, filters, sorter) => {
